@@ -1,4 +1,4 @@
-package database;
+package com.example.demo.database;
 
 import java.io.Serializable;
 
@@ -8,7 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Table;
 
-import org.springframework.data.annotation.Id;
+import javax.persistence.Id;
 
 @Entity
 @Table(name = "rooms")
@@ -16,9 +16,10 @@ public class rooms implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "id")
 	private Integer id;
 	
-	@Column(name = "numer")
+	@Column(name = "number")
 	private String number;
 	
 	@Column(name = "name")
@@ -31,9 +32,5 @@ public class rooms implements Serializable {
 		this.id = id;
 		this.number = number;
 		this.name = name;
-	}
-	
-	
-	
-	
+	}	
 }
