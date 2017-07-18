@@ -14,6 +14,11 @@ import javax.persistence.Id;
 @Table(name = "rooms")
 public class Room implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id")
@@ -33,8 +38,34 @@ public class Room implements Serializable {
 		this.name = name;
 	}	
 	
-/*	@Override
+	@Override
 	public String toString() {
 		return "Rooms [id=" + id + ", number=" + number + ", name=" + name + "]";
-	} */
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public String getNumber() {
+		return number;
+	}
+
+	public void setNumber(String number) {
+		this.number = number;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	} 
+	
+	
 }
