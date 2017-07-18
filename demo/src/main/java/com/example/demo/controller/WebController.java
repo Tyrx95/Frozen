@@ -5,8 +5,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.database.Room;
 import com.example.demo.database.RoomRepository;
-import com.example.demo.database.Rooms;
+
 
 @RestController
 public class WebController {
@@ -15,20 +16,19 @@ public class WebController {
 	
 	@RequestMapping("/save")
 	public String process(){
-		repository.save(new Rooms("853", "Smith"));
-		repository.save(new Rooms("485", "LKA"));
-		repository.save(new Rooms("85", "GH"));
-		repository.save(new Rooms("55", "KO"));
-		repository.save(new Rooms("85834503485", "Sasd"));
+		repository.save(new Room("853", "Smith"));
+		repository.save(new Room("485", "LKA"));
+		repository.save(new Room("85", "GH"));
+		repository.save(new Room("55", "KO"));
+		repository.save(new Room("85834503485", "Sasd"));
 		return "Done";
 	}
-	
 	
 	@RequestMapping("/findall")
 	public String findAll(){
 		String result = "<html>";
 		
-		for(Rooms room : repository.findAll()){
+		for(Room room : repository.findAll()){
 			result += "<div>" + room.toString() + "</div>";
 		}
 		
@@ -46,7 +46,7 @@ public class WebController {
 	public String fetchDataByLastName(@RequestParam("name") String name){
 		String result = "<html>";
 		
-		for(Rooms room: repository.findByName(name)){
+		for(Room room: repository.findByName(name)){
 			result += "<div>" + room.toString() + "</div>"; 
 		}
 		
