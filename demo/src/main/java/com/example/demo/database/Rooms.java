@@ -12,12 +12,12 @@ import javax.persistence.Id;
 
 @Entity
 @Table(name = "rooms")
-public class rooms implements Serializable {
+public class Rooms implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id")
-	private Integer id;
+	private Long id;
 	
 	@Column(name = "number")
 	private String number;
@@ -25,12 +25,16 @@ public class rooms implements Serializable {
 	@Column(name = "name")
 	private String name;
 	
-	protected rooms () {}
+	protected Rooms () {}
 
-	public rooms(Integer id, String number, String name) {
+	public Rooms(String number, String name) {
 		super();
-		this.id = id;
 		this.number = number;
 		this.name = name;
+	}
+
+	@Override
+	public String toString() {
+		return "Rooms [id=" + id + ", number=" + number + ", name=" + name + "]";
 	}	
 }
