@@ -11,7 +11,7 @@ import com.example.demo.database.Room;
 import com.example.demo.service.RoomService;
 
 @RestController
-@CrossOrigin
+//@CrossOrigin
 @RequestMapping(path="/room")
 public class RoomController {
 	
