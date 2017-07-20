@@ -46,6 +46,12 @@ public class RoomController {
         return "redirect:/admin";
     }
 
+	
+	@RequestMapping("room/new")
+    public String newRoom(Model model){
+        model.addAttribute("room", new Room());
+        return "roomform";
+    }
 	  
 
 	  @RequestMapping("room/delete/{id}")

@@ -36,7 +36,7 @@ public class Room implements Serializable {
 	@Column(name = "name")
 	private String name;
 	
-	protected Room () {}
+	public Room () {}
 
 	public Room( String number, String name) {
 		super();

@@ -18,6 +18,35 @@
         </form>
 
     </div>
+  <div th:if="${not #lists.isEmpty(rooms)}">
+            <table class="table table-striped">
+               <tr>
+                  <th>Number</th>
+                  <th>Name</th>
+                  <th>Edit</th>
+                  <th>Delete</th>
+               </tr>
+               <tr th:each="room : ${rooms}">
+                  <td th:text="${room.number}"></td>
+                  <td th:text="${room.name}"></td>
+        		   <td>
+                   	<a th:href="${'/room/edit/' + room.id}" class="btn btn-danger" role="button">
+                   		Edit
+                   	</a>  
+        		   </td>
+        		   <td>
+                   	<a th:href="${'/room/delete/' + room.id}" class="btn btn-danger" role="button">
+                   		Delete
+                   	</a>
+        		   </td>
+               </tr>
+               
+            </table>
+         </div>
+         
+         <div th:unless="${not #lists.isEmpty(rooms)}">
+   			<div>List is empty</div>
+		</div>
 
 </div>
 <!-- /.container -->
