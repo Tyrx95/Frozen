@@ -8,6 +8,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Table;
 
+import org.springframework.data.annotation.Version;
+
 import javax.persistence.Id;
 
 @Entity
@@ -23,6 +25,10 @@ public class Room implements Serializable {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id")
 	private Long id;
+	
+	@Version
+	private Integer version;
+	
 	
 	@Column(name = "number")
 	private String number;
@@ -66,6 +72,16 @@ public class Room implements Serializable {
 	public void setName(String name) {
 		this.name = name;
 	} 
+	
+
+	public Integer getVersion() {
+		return version;
+	}
+
+	public void setVersion(Integer version) {
+		this.version = version;
+	}
+
 	
 	
 }

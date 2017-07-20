@@ -35,16 +35,13 @@ public class RoomServiceImpl implements RoomService {
 
 	@Override
 	public void update(Room room) {
-		// TODO Auto-generated method stub
+		repository.save(room);
 		
 	}
 
 	@Override
 	public Room getOne(Long id) {
-		// TODO Auto-generated method stub
-		
-		
-		return null;
+		return repository.findOne(id);
 	}
 	 
 	

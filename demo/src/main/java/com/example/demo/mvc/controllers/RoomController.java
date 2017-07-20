@@ -40,16 +40,25 @@ public class RoomController {
 	    return "admin";
 	}
 	
-	  @RequestMapping(value = "/add", method = RequestMethod.POST)
-	    public ResponseEntity saveRoom(@RequestBody Room room){
-	        roomService.add(room);
-	        return new ResponseEntity("Product saved successfully", HttpStatus.OK);
-	    }
+	@RequestMapping(value = "room", method = RequestMethod.POST)
+    public String saveRoom(Room room){
+        roomService.update(room);
+        return "redirect:/admin";
+    }
+
+	  
 
 	  @RequestMapping("room/delete/{id}")
 	    public String delete(@PathVariable Long id){
 	        roomService.delete(id);
 	        return "redirect:/admin";
 	    }
+	  
+	  @RequestMapping("room/edit/{id}")
+	    public String edit(@PathVariable Long id, Model model){
+	        model.addAttribute("room", roomService.getOne(id));
+	        return "roomform";
+	    }
+	  
 	 
 }
