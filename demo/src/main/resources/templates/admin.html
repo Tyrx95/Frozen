@@ -33,7 +33,9 @@
                    	<button class="btn btn-success">Edit</button>  
         		   </td>
         		   <td>
-                   	<button class="btn btn-danger">Delete</button>  
+                   	<button class="btn btn-danger">
+                   	<a th:href="${'/room/delete/' + room.id}">Delete</a>
+                   	</button>  
         		   </td>
                </tr>
                

@@ -29,6 +29,7 @@ public class RoomServiceImpl implements RoomService {
 	@Override
 	public void delete(Long id) {
 		// TODO Auto-generated method stub
+		repository.delete(id);
 		
 	}
 
@@ -41,6 +42,8 @@ public class RoomServiceImpl implements RoomService {
 	@Override
 	public Room getOne(Long id) {
 		// TODO Auto-generated method stub
+		
+		
 		return null;
 	}
 	 

@@ -22,7 +22,7 @@ public class Room implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id")
-	private Integer id;
+	private Long id;
 	
 	@Column(name = "number")
 	private String number;
@@ -43,11 +43,11 @@ public class Room implements Serializable {
 		return "Rooms [id=" + id + ", number=" + number + ", name=" + name + "]";
 	}
 
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
