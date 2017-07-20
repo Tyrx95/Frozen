@@ -23,12 +23,16 @@
                <tr>
                   <th>Number</th>
                   <th>Name</th>
+                  <th>Start work time</th>
+                  <th>End work time</th>
                   <th>Edit</th>
                   <th>Delete</th>
                </tr>
                <tr th:each="room : ${rooms}">
                   <td th:text="${room.number}"></td>
                   <td th:text="${room.name}"></td>
+                  <td th:text="${room.startWorkTime}"></td>
+                  <td th:text="${room.endWorkTime}"></td>
         		   <td>
                    	<a th:href="${'/room/edit/' + room.id}" class="btn btn-success" role="button">
                    		Edit

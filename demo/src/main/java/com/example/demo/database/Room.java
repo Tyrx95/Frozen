@@ -1,6 +1,7 @@
 package com.example.demo.database;
 
 import java.io.Serializable;
+import java.time.LocalTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Table;
 
 import org.springframework.data.annotation.Version;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Id;
 
@@ -36,6 +38,25 @@ public class Room implements Serializable {
 	@Column(name = "name")
 	private String name;
 	
+	@DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
+	@Column (name = "startWorkTime")
+	private LocalTime startWorkTime;
+	
+	@DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
+	@Column (name = "endWorkTime")
+	private LocalTime endWorkTime;
+	
+	
+	
+
+	public Room( String number, String name, LocalTime startWorkTime, LocalTime endWorkTime) {
+		super();
+		this.number = number;
+		this.name = name;
+		this.startWorkTime = startWorkTime;
+		this.endWorkTime = endWorkTime;
+	}
+
 	public Room () {}
 
 	public Room( String number, String name) {
@@ -82,6 +103,22 @@ public class Room implements Serializable {
 		this.version = version;
 	}
 
+	
+	public LocalTime getStartWorkTime() {
+		return startWorkTime;
+	}
+
+	public void setStartWorkTime(LocalTime startWorkTime) {
+		this.startWorkTime = startWorkTime;
+	}
+
+	public LocalTime getEndWorkTime() {
+		return endWorkTime;
+	}
+
+	public void setEndWorkTime(LocalTime endWorkTime) {
+		this.endWorkTime = endWorkTime;
+	}
 	
 	
 }
