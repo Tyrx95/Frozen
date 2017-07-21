@@ -13,24 +13,28 @@
         <h1>Admin page (Spring Security protected)</h1>
 
         <h1 th:inline="text">Hello [[${#httpServletRequest.remoteUser}]]!</h1>
-        <form th:action="@{/logout}" method="post">
-            <input type="submit" value="Sign Out"/>
-        </form>
+     </div>
 
-    </div>
+<a th:href="@{'/room/new/'}" class="btn btn-primary" role="button">
+                   		Add new room
+                   	</a>  
   <div th:if="${not #lists.isEmpty(rooms)}">
             <table class="table table-striped">
                <tr>
                   <th>Number</th>
                   <th>Name</th>
+                  <th>Start work time</th>
+                  <th>End work time</th>
                   <th>Edit</th>
                   <th>Delete</th>
                </tr>
                <tr th:each="room : ${rooms}">
                   <td th:text="${room.number}"></td>
                   <td th:text="${room.name}"></td>
+                  <td th:text="${room.startWorkTime}"></td>
+                  <td th:text="${room.endWorkTime}"></td>
         		   <td>
-                   	<a th:href="${'/room/edit/' + room.id}" class="btn btn-danger" role="button">
+                   	<a th:href="${'/room/edit/' + room.id}" class="btn btn-success" role="button">
                    		Edit
                    	</a>  
         		   </td>
