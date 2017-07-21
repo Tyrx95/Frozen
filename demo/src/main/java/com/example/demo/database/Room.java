@@ -28,10 +28,6 @@ public class Room implements Serializable {
 	@Column(name = "id")
 	private Long id;
 	
-	@Version
-	private Integer version;
-	
-	
 	@Column(name = "number")
 	private String number;
 	
@@ -95,15 +91,6 @@ public class Room implements Serializable {
 	} 
 	
 
-	public Integer getVersion() {
-		return version;
-	}
-
-	public void setVersion(Integer version) {
-		this.version = version;
-	}
-
-	
 	public LocalTime getStartWorkTime() {
 		return startWorkTime;
 	}
