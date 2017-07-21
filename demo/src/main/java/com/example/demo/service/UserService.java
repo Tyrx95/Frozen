@@ -13,8 +13,9 @@ public interface UserService {
 	 List<User> findAll();
 	 void add(User user);
 	 void delete(Long id);
-	 void update(User user);
-	 User getOne(Long id);
+	 User getByViberId(String viberId);
+	 void subscribe(String viberId);
+	 void unsubscribe(String viberId);
 	 
 	 
 	 

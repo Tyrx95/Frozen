@@ -21,22 +21,26 @@ public class UserServiceImpl {
 		}
 	 
 	 public void add(User user){
-		 
 		 repository.save(user);
 	 }
 
 	public void delete(Long id) {
-		// TODO Auto-generated method stub
 		repository.delete(id);
 		
 	}
 
-	public void update(User user) {
-		repository.save(user);
+	public void subscribe(String viberId) {
+		//TO-DO
 		
 	}
 
-	public User getOne(Long id) {
-		return repository.findOne(id);
+	public void unsubscribe(String viberId) {
+		//TO-DO
 	}
+	
+	 User getByViberId(String viberId){
+		 // TODO 
+		 return null;
+	 }
+	
 }

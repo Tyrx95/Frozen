@@ -7,12 +7,19 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.database.Room;
 import com.example.demo.database.RoomRepository;
+import com.example.demo.database.User;
+import com.example.demo.database.UserRepository;
+
 
 
 @RestController
 public class WebController {
 	@Autowired
 	RoomRepository repository;
+	
+	@Autowired
+	UserRepository repository1;
+	
 	
 	@RequestMapping("/save")
 	public String process(){
@@ -21,8 +28,16 @@ public class WebController {
 		repository.save(new Room("85", "GH"));
 		repository.save(new Room("55", "KO"));
 		repository.save(new Room("85834503485", "Sasd"));
+		
+		repository1.save(new User(null, null, false));
+		repository1.save(new User("485", "LKA", false));
+		repository1.save(new User("85", "GH", false));
+		repository1.save(new User("55", "KO", false));
+		repository1.save(new User("85834503485", "Sasd", false));
 		return "Done";
 	}
+
+
 	
 	@RequestMapping("/findall")
 	public String findAll(){
