@@ -41,9 +41,14 @@ public class RoomController {
 	@RequestMapping(value = "room", method = RequestMethod.POST)
     public String saveRoom(Room room){
         roomService.update(room);
-        return "redirect:/admin";
+        return "redirect:/roomshow";
     }
 
+	@RequestMapping("roomshow")
+    public String showRoom(Model model){
+		model.addAttribute("rooms",roomService.listAll());
+        return "rooms";
+    }
 	
 	@RequestMapping("room/new")
     public String newRoom(Model model){
@@ -55,7 +60,7 @@ public class RoomController {
 	  @RequestMapping("room/delete/{id}")
 	    public String delete(@PathVariable Long id){
 	        roomService.delete(id);
-	        return "redirect:/admin";
+	        return "redirect:/roomshow";
 	    }
 	  
 	  @RequestMapping("room/edit/{id}")

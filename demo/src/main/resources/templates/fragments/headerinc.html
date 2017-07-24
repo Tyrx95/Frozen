@@ -12,6 +12,20 @@
    
 </head>
 <body>
-
+<div th:fragment="header">
+    <!-- this is header -->
+    <nav class="navbar navbar-inverse">
+        <div class="container">
+            <div class="navbar-header">
+            <ul class="nav nav-tabs" role="tablist">
+                <li><a class="navbar-brand" th:href="@{/}">Viber Bot</a></li>
+                <li><a class="navbar-brand" th:href="@{/roomshow}">Rooms</a></li>
+                <li><a class="navbar-brand" th:href="@{/}">Users</a></li>
+                <li><a class="navbar-brand" th:href="@{/}">Reservations</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</div>
 </body>
 </html>

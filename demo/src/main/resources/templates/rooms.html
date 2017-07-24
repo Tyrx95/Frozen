@@ -1,0 +1,45 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+   <head>
+      <div th:replace="fragments/header :: header-css"/>
+   </head>
+   <body>
+      <div th:replace="fragments/headerinc :: header"/>
+      <div class="container">
+         <a th:href="@{'/room/new/'}" class="btn btn-primary" role="button">Add new room</a>  
+         <div th:if="${not #lists.isEmpty(rooms)}">
+            <table class="table table-striped">
+               <tr>
+                  <th>Number</th>
+                  <th>Name</th>
+                  <th>Start work time</th>
+                  <th>End work time</th>
+                  <th>Edit</th>
+                  <th>Delete</th>
+               </tr>
+               <tr th:each="room : ${rooms}">
+                  <td th:text="${room.number}"></td>
+                  <td th:text="${room.name}"></td>
+                  <td th:text="${room.startWorkTime}"></td>
+                  <td th:text="${room.endWorkTime}"></td>
+                  <td>
+                     <a th:href="${'/room/edit/' + room.id}" class="btn btn-success" role="button">
+                     Edit
+                     </a>  
+                  </td>
+                  <td>
+                     <a th:href="${'/room/delete/' + room.id}" class="btn btn-danger" role="button">
+                     Delete
+                     </a>
+                  </td>
+               </tr>
+            </table>
+         </div>
+         <div th:unless="${not #lists.isEmpty(rooms)}">
+            <div>List is empty</div>
+         </div>
+      </div>
+      <!-- /.container -->
+      <div th:replace="fragments/footer :: footer"/>
+   </body>
+</html>

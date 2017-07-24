@@ -34,4 +34,8 @@ public class DefaultController {
         return "error/403";
     }
 
+    @GetMapping("/rooms")
+    public String rooms() {
+        return "rooms";
+    }
 }
