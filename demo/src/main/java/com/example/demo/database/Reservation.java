@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,6 +15,8 @@ import org.springframework.data.annotation.Version;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 @Entity
 @Table(name = "reservations")
@@ -25,11 +28,13 @@ public class Reservation implements Serializable{
 	@Column(name = "id")
 	private Long id;
 	
-	@Column(name = "userId")
-	private Long userId;
+	@JoinColumn(name = "userId")
+	@ManyToOne(cascade = CascadeType.REMOVE)
+	private User userId;
 	
-	@Column(name = "roomId")
-	private Long roomId;
+	@JoinColumn(name = "roomId")
+	@ManyToOne(cascade = CascadeType.REMOVE)
+	private Room roomId;
 	
 	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
 	@Column (name = "date")
@@ -39,7 +44,7 @@ public class Reservation implements Serializable{
 	@Column (name = "time")
 	private LocalTime time;
 	
-	public Reservation(long userId, long roomId, LocalDate date, LocalTime time) {
+	public Reservation(User userId, Room roomId, LocalDate date, LocalTime time) {
 		super();
 		this.userId = userId;
 		this.roomId = roomId;
@@ -64,22 +69,22 @@ public class Reservation implements Serializable{
 	}
 
 
-	public Long getUserId() {
+	public User getUserId() {
 		return userId;
 	}
 
 
-	public void setUserId(Long userId) {
+	public void setUserId(User userId) {
 		this.userId = userId;
 	}
 
 
-	public Long getRoomId() {
+	public Room getRoomId() {
 		return roomId;
 	}
 
 
-	public void setRoomId(Long roomId) {
+	public void setRoomId(Room roomId) {
 		this.roomId = roomId;
 	}
 
