@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UserRepository extends CrudRepository<User, Long>{
-	public List<User> findAll();
-	public List<User> findByName(String name);
+
+	public User findByViberId(String viberId);
+	
 }

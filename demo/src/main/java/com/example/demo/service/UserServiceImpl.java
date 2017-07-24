@@ -5,42 +5,49 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.demo.database.User;
 import com.example.demo.database.UserRepository;
 
 @Service
-public class UserServiceImpl {
+public class UserServiceImpl implements UserService {
+	
 	@Autowired
-	 UserRepository repository; 
-	 
-	 public List<User> findAll() {
-		    List<User> users = new ArrayList<>();
-		    repository.findAll().forEach(users::add);
-		    return users;
-		}
-	 
-	 public void add(User user){
-		 repository.save(user);
-	 }
+	UserRepository repository;
+
+	public List<User> findAll() {
+		List<User> users = new ArrayList<>();
+		repository.findAll().forEach(users::add);
+		return users;
+	}
+
+	public void add(User user) {
+		System.out.println("add:"+user);
+		repository.save(user);
+	}
 
 	public void delete(Long id) {
 		repository.delete(id);
-		
+
 	}
 
 	public void subscribe(String viberId) {
-		//TO-DO
-		
+		User user = getByViberId(viberId);
+		user.setSubscribe(true);
+		add(user);
 	}
 
 	public void unsubscribe(String viberId) {
-		//TO-DO
+		User user = getByViberId(viberId);
+		System.out.println("get by ID:"+user);
+		user.setSubscribe(false);
+		System.out.println("flag changed:"+user);
+		add(user);
 	}
-	
-	 User getByViberId(String viberId){
-		 // TODO 
-		 return null;
-	 }
-	
+
+	public User getByViberId(@RequestParam("viberId") String viberId) {
+		return repository.findByViberId(viberId);
+	}
+
 }

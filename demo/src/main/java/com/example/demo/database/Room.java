@@ -18,9 +18,7 @@ import javax.persistence.Id;
 @Table(name = "rooms")
 public class Room implements Serializable {
 
-	/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -28,7 +26,7 @@ public class Room implements Serializable {
 	@Column(name = "id")
 	private Long id;
 	
-	@Column(name = "number")
+	@Column(name = "number", unique=true)
 	private String number;
 	
 	@Column(name = "name")
@@ -55,12 +53,6 @@ public class Room implements Serializable {
 
 	public Room () {}
 
-	public Room( String number, String name) {
-		super();
-		this.number = number;
-		this.name = name;
-	}	
-	
 	@Override
 	public String toString() {
 		return "Rooms [id=" + id + ", number=" + number + ", name=" + name + "]";

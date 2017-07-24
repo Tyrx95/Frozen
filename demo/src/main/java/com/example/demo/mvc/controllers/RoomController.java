@@ -24,8 +24,6 @@ import com.example.demo.service.RoomService;
 @Controller
 public class RoomController {
 	
-	
-	
 	private RoomService roomService;
 	
 

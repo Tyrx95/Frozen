@@ -33,13 +33,13 @@
 //	
 //	@GetMapping("/admin")
 //	public String countsList(Model model) {
-//	    model.addAttribute("users",userService.listAll());
+//	    model.addAttribute("users",userService.findAll());
 //	    return "admin";
 //	}
 //	
 //	@RequestMapping(value = "user", method = RequestMethod.POST)
 //    public String saveUser(User user){
-//        userService.update(user);
+//        userService.add(user);
 //        return "redirect:/admin";
 //    }
 //
@@ -56,12 +56,6 @@
 //	        userService.delete(id);
 //	        return "redirect:/admin";
 //	    }
-//	  
-//	  @RequestMapping("user/edit/{id}")
-//	    public String edit(@PathVariable Long id, Model model){
-//	        model.addAttribute("user", userService.getOne(id));
-//	        return "userform";
-//	    }
-//	  
+//
 //	 
 //}

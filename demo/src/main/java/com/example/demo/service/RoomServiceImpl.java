@@ -12,7 +12,7 @@ import com.example.demo.database.RoomRepository;
 @Service
 public class RoomServiceImpl implements RoomService {
 
-	@Autowired
+	 @Autowired
 	 RoomRepository repository; 
 	 
 	 public List<Room> listAll() {
@@ -35,6 +35,7 @@ public class RoomServiceImpl implements RoomService {
 
 	@Override
 	public void update(Room room) {
+		
 		repository.save(room);
 		
 	}

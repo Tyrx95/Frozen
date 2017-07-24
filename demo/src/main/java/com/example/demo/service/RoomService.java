@@ -16,7 +16,4 @@ public interface RoomService {
 	 void update(Room room);
 	 Room getOne(Long id);
 	 
-	 
-	 
-	 
 }

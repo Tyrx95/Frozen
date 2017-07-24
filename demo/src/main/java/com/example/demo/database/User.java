@@ -18,9 +18,7 @@ import javax.persistence.Id;
 @Table(name = "users")
 public class User implements Serializable {
 
-	/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -44,6 +42,8 @@ public class User implements Serializable {
 		this.name = name;
 		this.subscribe = subscribe;
 	}
+	
+	public User () {}
 	
 
 	@Override
