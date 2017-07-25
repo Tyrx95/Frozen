@@ -6,6 +6,7 @@
    <body>
       <div th:replace="fragments/headerinc :: header"/>
       <div class="container">
+      <h2>Users</h2>
          <div th:if="${not #lists.isEmpty(users)}">
             <table class="table table-striped">
                <tr>

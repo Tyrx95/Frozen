@@ -6,6 +6,7 @@
    <body>
       <div th:replace="fragments/headerinc :: header"/>
       <div class="container">
+      <h2>Rooms</h2>
          <a th:href="@{'/room/new/'}" class="btn btn-primary" role="button">Add new room</a>  
          <div th:if="${not #lists.isEmpty(rooms)}">
             <table class="table table-striped">
