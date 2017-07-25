@@ -38,4 +38,9 @@ public class DefaultController {
     public String rooms() {
         return "rooms";
     }
+    
+        @GetMapping("/users")
+        public String users() {
+            return "users";
+       }
 }
