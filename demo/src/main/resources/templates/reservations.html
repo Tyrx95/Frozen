@@ -1,0 +1,32 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+   <head>
+      <div th:replace="fragments/header :: header-css"/>
+   </head>
+   <body>
+      <div th:replace="fragments/headerinc :: header"/>
+      <div class="container">
+         <div th:if="${not #lists.isEmpty(reservations)}">
+            <table class="table table-striped">
+               <tr>
+                  <th>User ID</th>
+                  <th>Room ID</th>
+                  <th>Date</th>
+                  <th>Time</th>
+               </tr>
+               <tr th:each="reservation : ${reservations}">
+                  <td th:text="${reservation.userId}"></td>
+                  <td th:text="${reservation.roomId}"></td>
+                  <td th:text="${reservation.date}"></td>
+                  <td th:text="${reservation.time}"></td>
+               </tr>
+            </table>
+          </div>     
+         <div th:unless="${not #lists.isEmpty(reservations)}">
+            <div>List is empty</div>
+         </div>
+      </div>
+      <!-- /.container -->
+      <div th:replace="fragments/footer :: footer"/>
+   </body>
+</html>

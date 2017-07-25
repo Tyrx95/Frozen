@@ -1,0 +1,31 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+   <head>
+      <div th:replace="fragments/header :: header-css"/>
+   </head>
+   <body>
+      <div th:replace="fragments/headerinc :: header"/>
+      <div class="container">
+         <div th:if="${not #lists.isEmpty(users)}">
+            <table class="table table-striped">
+               <tr>
+                  <th>ViberId</th>
+                  <th>Name</th>
+                  <th>Subscribe</th>
+                  </tr>
+                  
+               <tr th:each="user : ${users}">
+                  <td th:text="${user.viberId}"></td>
+                  <td th:text="${user.name}"></td>
+                  <td th:text="${user.subscribe}"></td>
+               </tr>
+            </table>
+         </div>
+         <div th:unless="${not #lists.isEmpty(users)}">
+            <div>List is empty</div>
+         </div>
+      </div>
+      <!-- /.container -->
+      <div th:replace="fragments/footer :: footer"/>
+   </body>
+</html>

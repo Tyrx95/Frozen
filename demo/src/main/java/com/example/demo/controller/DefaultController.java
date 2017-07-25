@@ -39,8 +39,13 @@ public class DefaultController {
         return "rooms";
     }
     
-        @GetMapping("/users")
-        public String users() {
-            return "users";
-       }
+    @GetMapping("/users")
+    public String users() {
+         return "users";
+    }
+        
+    @GetMapping("/reservations")
+    public String reservations() {
+        return "reservations";
+    }
 }

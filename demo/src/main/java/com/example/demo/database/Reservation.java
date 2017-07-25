@@ -52,12 +52,14 @@ public class Reservation implements Serializable{
 		this.time = time;
 	}
 	
+	public Reservation(){}
 
 	@Override
 	public String toString() {
 		return "Reservations [id=" + id + ", user=" + userId + ", room=" + roomId + ", date=" + date + ", time=" + time + "]";
 	}
 
+	
 
 	public Long getId() {
 		return id;
