@@ -37,8 +37,7 @@ public class ReservationServiceImpl implements ReservationService{
 
 	@Override
 	public void delete(Long id) {
-		// TODO Auto-generated method stub
-		
+		repository.delete(id);		
 	}
 
 	@Override
