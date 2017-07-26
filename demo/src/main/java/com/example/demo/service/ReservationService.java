@@ -9,7 +9,7 @@ import com.example.demo.database.User;
 
 public interface ReservationService {
 
-	Iterable<Reservation> getAll();
+	List<Reservation> getAll();
 	void reserve(Reservation reservation);
 	void edit(Reservation reservation);
 	void delete(Long id);
