@@ -46,8 +46,8 @@ public class ReservationServiceImpl implements ReservationService{
 	}
 
 	@Override
-	public Iterable<LocalTime> getFreeRoomCapacitiesOnDate(Long roomId, LocalDate date) {
-		return repository.getFreeRoomCapacitiesOnDate(roomId, date);
+	public Iterable<LocalTime> getFreeRoomCapacitiesOnDate(String roomNumber, LocalDate date) {
+		return repository.getFreeRoomCapacitiesOnDate(roomNumber, date);
 	}
 
 	@Override

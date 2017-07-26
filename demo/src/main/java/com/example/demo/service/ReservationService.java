@@ -13,6 +13,6 @@ public interface ReservationService {
 	void reserve(Reservation reservation);
 	void edit(Reservation reservation);
 	void delete(Long id);
-	Iterable<LocalTime> getFreeRoomCapacitiesOnDate(Long roomId, LocalDate date);
+	Iterable<LocalTime> getFreeRoomCapacitiesOnDate(String roomId, LocalDate date);
 	Reservation getByUser(String viberId);
 }

@@ -15,6 +15,7 @@ import java.util.Optional;
 import java.util.concurrent.Future;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -49,6 +50,9 @@ public class ViberBotServiceImpl implements ViberBotService {
 
 	@Autowired
 	private RoomService roomService;
+	
+	@Autowired
+	private ReservationService reservationService;
 	
 	String roomNumber;
 	
@@ -95,7 +99,7 @@ public class ViberBotServiceImpl implements ViberBotService {
 					TrackingData trData = new TrackingData(trDataHMap);
 
 					response.send(
-							new TextMessage("Enter the desired date in format : dd.MM.yyyy", createCancelKeyboard(), trData, new Integer(1)));
+							new TextMessage("Enter the desired date in format : dd.mm.yyyy", createCancelKeyboard(), trData, new Integer(1)));
 
 				}
 				
@@ -104,20 +108,20 @@ public class ViberBotServiceImpl implements ViberBotService {
 					try{
 						
 						DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-						LocalDate dateX = LocalDate.parse(messageText, formatter);
-						date=dateX;
-						System.out.println(dateX);
-						System.out.println(date);
-						System.out.println("FOrmat is good ");
-						System.out.println(date);
-						
+						date = LocalDate.parse(messageText, formatter);
+						Map<String, Object> trDataHMap = new HashMap<>();
+						trDataHMap.put("message", "choose_time");
+						TrackingData trData = new TrackingData(trDataHMap);
+
+						response.send(
+								new TextMessage("Pick desired time of reservation: ", 
+										createTimeKeyboard(), trData, new Integer(1)));
+					
 					}
 					catch(Exception e)
 					{	
-						System.out.println(date);
-						System.out.println(messageText);
-
-						response.send(new TextMessage("Invalid format. Please enter the date again in format : dd.MM.yyyy",
+						
+						response.send(new TextMessage("Invalid format. Please enter the date again in format : dd.mm.yyyy",
 								createCancelKeyboard(),
 								message.getTrackingData(),
 								new Integer(1)));
@@ -125,6 +129,9 @@ public class ViberBotServiceImpl implements ViberBotService {
 					
 
 				}
+				
+				
+				
 				
 				
 				
@@ -234,6 +241,35 @@ public class ViberBotServiceImpl implements ViberBotService {
 		cancelButton.put("ActionBody", "Cancel");
 		buttons.add(cancelButton);
 		keyboardMap.put("Buttons", buttons);
+
+		return new MessageKeyboard(keyboardMap);
+
+	}
+	
+	
+	private MessageKeyboard createTimeKeyboard() {
+		
+		Map<String, Object> keyboardMap = new HashMap<>();
+		keyboardMap.put("Type", "keyboard");
+		List<Room> rooms = roomService.listAll();
+		List<Map> buttons = new ArrayList<>();
+
+		Map<String, Object> cancelButton = new HashMap<>();
+		cancelButton.put("Text", "Cancel");
+		cancelButton.put("BgColor", "#f00b0b");
+		cancelButton.put("ActionBody", "Cancel");
+		buttons.add(cancelButton);
+
+		
+		
+		for (LocalTime time : reservationService.getFreeRoomCapacitiesOnDate(roomNumber, date)) {
+
+			System.out.println(time);
+
+		}
+
+		keyboardMap.put("Buttons", buttons);
+		
 
 		return new MessageKeyboard(keyboardMap);
 
