@@ -3,21 +3,26 @@ package com.example.demo.service;
 import com.viber.bot.Response;
 import com.viber.bot.api.ViberBot;
 import com.viber.bot.event.callback.OnConversationStarted;
+import com.viber.bot.event.callback.OnMessageReceived;
 import com.viber.bot.event.callback.OnSubscribe;
 import com.viber.bot.event.callback.OnUnsubscribe;
 import com.viber.bot.event.incoming.IncomingConversationStartedEvent;
+import com.viber.bot.event.incoming.IncomingMessageEvent;
 import com.viber.bot.event.incoming.IncomingSubscribedEvent;
 import com.viber.bot.event.incoming.IncomingUnsubscribeEvent;
 
 import java.util.Optional;
 import java.util.concurrent.Future;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.database.Room;
 import com.example.demo.database.User;
 import com.example.demo.database.UserRepository;
 import com.fasterxml.jackson.core.JsonParseException;
@@ -35,18 +40,61 @@ import ch.qos.logback.core.net.SyslogOutputStream;
 
 @Service
 public class ViberBotServiceImpl implements ViberBotService {
-
+	
+	@Autowired
 	private UserService userService;
 
 	@Autowired
-	public void setUserService(UserService userService) {
-		this.userService = userService;
-	}
+	private RoomService roomService;
+
+
 
 	@Override
 	public void onMessageReceived(ViberBot bot) {
 
-		bot.onMessageReceived((event, message, response) -> response.send("Alooo momaak"));
+		bot.onMessageReceived((new OnMessageReceived() {
+			@Override
+			public void messageReceived(IncomingMessageEvent event, Message message, Response response) {
+				
+				
+				if(message.getTrackingData().get("message").equals("welcome_message")) {
+					
+					if(message.getMapRepresentation().get("text").equals("Reserve room")){
+							MessageKeyboard roomKeyboard = createRoomKeyboard();
+							Map<String, Object> trDataHMap = new HashMap<>();
+							trDataHMap.put("message", "get_rooms");
+							TrackingData trData=new TrackingData(trDataHMap);
+
+							response.send(new TextMessage("Please select one of the available rooms."
+									,roomKeyboard, trData, new Integer(1))
+									);
+					}
+					else if(message.getMapRepresentation().get("text").equals("See previous reservations")){
+							
+							}
+					
+				}
+				
+				
+				else if(message.getTrackingData().get("message").equals("get_rooms")) {
+					
+					
+					System.out.println("Listing rooms.. ");
+					
+					
+					
+					
+				}				
+				
+				
+				
+				
+				
+
+			}
+
+		}));
+
 	}
 
 	@Override
@@ -59,13 +107,13 @@ public class ViberBotServiceImpl implements ViberBotService {
 
 				if (userService.getByViberId(userPr.getId()) == null) {
 					userService.add(new User(userPr.getId(), userPr.getName(), true));
-					response.send("Vi ste novi.");
+					
 				}
 
 				else {
 
 					userService.subscribe(userPr.getId());
-					response.send("Vec ste bili ovdje ");
+
 				}
 			}
 
@@ -99,39 +147,24 @@ public class ViberBotServiceImpl implements ViberBotService {
 			@Override
 			public Future<Optional<Message>> conversationStarted(IncomingConversationStartedEvent event) {
 
-				String JSONString = "{\"Type\": \"keyboard\",\"Buttons\": [{\"Columns\": 3,\"Rows\": 2,\"Text\": \"<font color=\\\"#494E67\\\">Smoking</font><br><br>\",\"TextSize\": \"medium\",\"TextHAlign\": \"center\",\"TextVAlign\": \"bottom\",\"ActionType\": \"reply\",\"ActionBody\": \"Smoking\",\"BgColor\": \"#f7bb3f\",\"Image\": \"https://s12.postimg.org/ti4alty19/smoke.png\"}, {\"Columns\": 3,\"Rows\": 2,\"Text\": \"<font color=\\\"#494E67\\\">Non Smoking</font><br><br>\",\"TextSize\": \"medium\",\"TextHAlign\": \"center\",\"TextVAlign\": \"bottom\",\"ActionType\": \"reply\",\"ActionBody\": \"Non smoking\",\"BgColor\": \"#f6f7f9\",\"Image\": \"https://s14.postimg.org/us7t38az5/Nonsmoke.png\"}]}";
+				String JSONString = "{\"Type\": \"keyboard\",\"Buttons\": [{\"Columns\": 3,\"Rows\": 2,\"Text\": \"<font color=\\\"#494E67\\\">Reserve room </font><br><br>\",\"TextSize\": \"medium\",\"TextHAlign\": \"center\",\"TextVAlign\": \"bottom\",\"ActionType\": \"reply\",\"ActionBody\": \"Reserve room\",\"BgColor\": \"#f7bb3f\"}, {\"Columns\": 3,\"Rows\": 2,\"Text\": \"<font color=\\\"#494E67\\\">See previous reservations</font><br><br>\",\"TextSize\": \"medium\",\"TextHAlign\": \"center\",\"TextVAlign\": \"bottom\",\"ActionType\": \"reply\",\"ActionBody\": \"See previous reservations\",\"BgColor\": \"#f6f7f9\"}]}";
 				String keyboardMessageStr = JSONString;
-				System.out.println("onConversation in. ");
+				
 
 				try {
 					MessageKeyboard messageKeyboard = new MessageKeyboard(
 							new ObjectMapper().readValue(keyboardMessageStr, new TypeReference<Map<String, Object>>() {
 							}));
-					System.out.println("onConversation parsed. ");
-
-					// bot.onConversationStarted(event ->
-					// Futures.immediateFuture(Optional.of(
-					// new TextMessage("Đez baaaa tebraaa , " +
-					// event.getUser().getName(),messageKeyboard, null, 0))));
 					
-					System.out.println(messageKeyboard);
 					Map<String, Object> trDataHMap = new HashMap<>();
-					trDataHMap.put("message", "reply");
+					trDataHMap.put("message", "welcome_message");
 					
 					TrackingData trData=new TrackingData(trDataHMap);
-					System.out.println("Tracking data created: ");
-					
-					String text="Đez baaaa tebraaa , " + event.getUser().getName();
-					System.out.println("Text created: ");
+					String text="Hello  , " + event.getUser().getName()+
+							". Welcome to ViberBot room reservation service .Please select one of the following options.";
 					Integer minApiVersion=new Integer(1);
-					System.out.println("MinApi version created : ");
-					
-					System.out.println("Creating TextMessage : ");
 					TextMessage txtMessage = new TextMessage(text,
 							messageKeyboard, trData,minApiVersion);
-					
-					System.out.println("Textmessage created: "+txtMessage);
-					
 					return Futures.immediateFuture(Optional.of(txtMessage));
 
 				} catch (JsonParseException e) {
@@ -152,4 +185,35 @@ public class ViberBotServiceImpl implements ViberBotService {
 
 	}
 
+	private MessageKeyboard createRoomKeyboard() {
+		
+		Map<String,Object> keyboardMap=new HashMap<>();
+		keyboardMap.put("Type","keyboard");
+		List<Room> rooms=roomService.listAll();
+		List<Map> buttons = new ArrayList<>();
+
+		Map<String, Object> cancelButton  = new HashMap<>();
+		cancelButton.put("Text", "Cancel");
+		cancelButton.put("BgColor", "#f00b0b");
+		cancelButton.put("ActionBody", "Cancel");
+    	buttons.add(cancelButton);
+		
+		for(Room room: rooms) {
+			
+			String roomOnViber=room.getName()+" "+room.getNumber();
+			Map<String, Object> button  = new HashMap<>();
+	    	button.put("BgColor", "#2db9b9");
+	    	button.put("Text", roomOnViber);
+	    	button.put("ActionBody", roomOnViber);
+	    	buttons.add(button);
+				
+		}
+		
+		keyboardMap.put("Buttons", buttons);
+		
+		return new MessageKeyboard(keyboardMap);
+		
+	}	
+	
+	
 }
