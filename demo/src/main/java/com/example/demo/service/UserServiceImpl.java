@@ -3,6 +3,8 @@ package com.example.demo.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,6 +24,8 @@ public class UserServiceImpl implements UserService {
 		return users;
 	}
 
+	@Override
+    @Transactional
 	public void add(User user) {
 		System.out.println("add:"+user);
 		repository.save(user);
@@ -32,6 +36,8 @@ public class UserServiceImpl implements UserService {
 
 	}
 
+	@Override
+    @Transactional
 	public void subscribe(String viberId) {
 		User user = getByViberId(viberId);
 		user.setSubscribe(true);

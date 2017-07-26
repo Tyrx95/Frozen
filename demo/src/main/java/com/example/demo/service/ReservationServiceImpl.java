@@ -1,8 +1,11 @@
 package com.example.demo.service;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,32 +27,32 @@ public class ReservationServiceImpl implements ReservationService{
 	}
 
 	@Override
+	@Transactional
 	public void reserve(Reservation reservation) {
-		// TODO Auto-generated method stub
+		repository.save(reservation);	
 		
 	}
 
 	@Override
+	@Transactional
 	public void edit(Reservation reservation) {
-		// TODO Auto-generated method stub
-		
+		repository.save(reservation);		
 	}
 
 	@Override
+	@Transactional
 	public void delete(Long id) {
-		repository.delete(id);		
+	      repository.delete(id);		
 	}
 
 	@Override
-	public int getFreeRoomCapacitiesOnDate(Long roomId, LocalDate date) {
-		// TODO Auto-generated method stub
-		return 0;
+	public Iterable<LocalTime> getFreeRoomCapacitiesOnDate(Long roomId, LocalDate date) {
+		return repository.getFreeRoomCapacitiesOnDate(roomId, date);
 	}
 
 	@Override
 	public Reservation getByUser(String viberId) {
-		// TODO Auto-generated method stub
-		return null;
+		return repository.getByUser(viberId);
 	}
 	
 

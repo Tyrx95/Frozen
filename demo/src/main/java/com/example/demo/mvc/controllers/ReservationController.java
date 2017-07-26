@@ -18,10 +18,8 @@ public class ReservationController {
 	}
 	
 	@RequestMapping("reservationshow")
-		public String showReservation(Model model){
-		System.out.println("In reservations ");
-		model.addAttribute("reservations", reservationService.getAll());
-		System.out.println("Returning reservations ");
+		public String showReservation(Model model){		
+		model.addAttribute("reservations", reservationService.getAll());		
 		return "reservations";
 	}
 }
