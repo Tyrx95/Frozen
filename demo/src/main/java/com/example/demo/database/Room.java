@@ -42,6 +42,8 @@ public class Room implements Serializable {
 	
 	
 	
+	
+	
 
 	public Room( String number, String name, LocalTime startWorkTime, LocalTime endWorkTime) {
 		super();
@@ -55,7 +57,7 @@ public class Room implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Rooms [id=" + id + ", number=" + number + ", name=" + name + "]";
+		return "Rooms [number=" + number + ", name=" + name + "]";
 	}
 
 	public Long getId() {

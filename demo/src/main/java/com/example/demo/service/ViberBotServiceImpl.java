@@ -18,6 +18,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -62,6 +63,7 @@ public class ViberBotServiceImpl implements ViberBotService {
 	private LocalDate date;
 	private LocalTime rTime;
 	private String viberId;
+	private Long resId;
 
 	@Override
 	public void onMessageReceived(ViberBot bot) {
@@ -80,21 +82,10 @@ public class ViberBotServiceImpl implements ViberBotService {
 				else if (msg.equals("welcome_message")) {
 
 					if (messageText.equals("Reserve room")) {
-						MessageKeyboard roomKeyboard = createRoomKeyboard();
-						Map<String, Object> trDataHMap = new HashMap<>();
-						trDataHMap.put("message", "get_rooms");
-						TrackingData trData = new TrackingData(trDataHMap);
-
-						response.send(new TextMessage("Please select one of the available rooms.", roomKeyboard, trData,
-								new Integer(1)));
+						response.send(createRoomTextMessage(""));
 					} else if (messageText.equals("See previous reservations")) {
-
-						Map<String, Object> trDataHMap = new HashMap<>();
-						trDataHMap.put("message", "show_reservations");
-						TrackingData trData = new TrackingData(trDataHMap);
 						viberId = event.getSender().getId();
-						response.send(new TextMessage("Your previous reservations are shown on the keyboard:",
-								createReservationsKeyboard(), trData, new Integer(1)));
+						response.send(createShowResMessage(""));
 
 					}
 
@@ -102,15 +93,22 @@ public class ViberBotServiceImpl implements ViberBotService {
 
 				else if (msg.equals("get_rooms")) {
 
-					Map<String, Object> trDataHMap = new HashMap<>();
-					trDataHMap.put("message", "enter_date");
-					roomName = messageText.split("\\s+")[0];
-					roomNumber = messageText.split("\\s+")[1];
-					System.out.println(roomNumber);
-					TrackingData trData = new TrackingData(trDataHMap);
+					if (messageText.split("\\s+")[0].equals("choose_room")) {
+						Map<String, Object> trDataHMap = new HashMap<>();
+						trDataHMap.put("message", "enter_date");
+						roomName = messageText.split("\\s+")[1];
+						roomNumber = messageText.split("\\s+")[2];
+						System.out.println(roomNumber);
+						TrackingData trData = new TrackingData(trDataHMap);
 
-					response.send(new TextMessage("Enter the desired date in format : dd.mm.yyyy",
-							createCancelKeyboard(), trData, new Integer(1)));
+						response.send(new TextMessage("Enter the desired date in format : dd.mm.yyyy",
+								createCancelKeyboard(), trData, new Integer(1)));
+					}
+
+					else {
+						response.send(createRoomTextMessage("Please use the rooms provided for selection. "));
+
+					}
 
 				}
 
@@ -120,12 +118,7 @@ public class ViberBotServiceImpl implements ViberBotService {
 
 						DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 						date = LocalDate.parse(messageText, formatter);
-						Map<String, Object> trDataHMap = new HashMap<>();
-						trDataHMap.put("message", "choose_time");
-						TrackingData trData = new TrackingData(trDataHMap);
-
-						response.send(new TextMessage("Pick desired time of reservation: ", createTimeKeyboard(),
-								trData, new Integer(1)));
+						response.send(createTimeTextMessage(""));
 
 					} catch (Exception e) {
 
@@ -138,51 +131,118 @@ public class ViberBotServiceImpl implements ViberBotService {
 
 				else if (msg.equals("choose_time")) {
 
-					Map<String, Object> trDataHMap = new HashMap<>();
-					trDataHMap.put("message", "confirm_reservation");
-					TrackingData trData = new TrackingData(trDataHMap);
-					rTime = LocalTime.parse(messageText, DateTimeFormatter.ISO_LOCAL_TIME);
-					response.send(new TextMessage(
-							"Do you want to confirm your reservation? \nReservation: \n" + "Room name: " + roomName
-									+ "\nRoom number: " + roomNumber + "\nReservation date: " + date.toString()
-									+ "\nReservation time: " + rTime.toString(),
-							createConfirmationKeyboard(), trData, new Integer(1)));
+					if (messageText.split("\\s+")[0].equals("-=choose_time=-")) {
+
+						Map<String, Object> trDataHMap = new HashMap<>();
+						trDataHMap.put("message", "confirm_reservation");
+						TrackingData trData = new TrackingData(trDataHMap);
+						rTime = LocalTime.parse(messageText.split("\\s+")[1], DateTimeFormatter.ISO_LOCAL_TIME);
+						response.send(new TextMessage(
+								"Do you want to confirm your reservation? \nReservation details: \n" + "Room name: "
+										+ roomName + "\nRoom number: " + roomNumber + "\nReservation date: "
+										+ date.toString() + "\nReservation time: " + rTime.toString(),
+								createConfirmationKeyboard(), trData, new Integer(1)));
+					}
+
+					else {
+
+						response.send(createTimeTextMessage("Please use the time slots provided. "));
+
+					}
 
 				}
 
 				else if (msg.equals("confirm_reservation")) {
 
-					Map<String, Object> trDataHMap = new HashMap<>();
-					trDataHMap.put("message", "end");
-					TrackingData trData = new TrackingData(trDataHMap);
-					User user = userService.getByViberId(event.getSender().getId());
-					Room room = roomService.getByNumber(roomNumber);
-					reservationService.reserve(new Reservation(user, room, date, rTime));
-					response.send(new TextMessage("Reservation confirmed, press Cancel to make a new one",
-							createCancelKeyboard(), trData, new Integer(1)));
+					if (messageText.equals("#A3#Confirm#A3#")) {
+						Map<String, Object> trDataHMap = new HashMap<>();
+						trDataHMap.put("message", "end");
+						TrackingData trData = new TrackingData(trDataHMap);
+						User user = userService.getByViberId(event.getSender().getId());
+						Room room = roomService.getByNumber(roomNumber);
+						reservationService.reserve(new Reservation(user, room, date, rTime));
+						response.send(new TextMessage("Reservation confirmed, press Home to go back to the main menu.",
+								createHomeKeyboard(), trData, new Integer(1)));
+					}
+					else {
+						
+						Map<String, Object> trDataHMap = new HashMap<>();
+						trDataHMap.put("message", "confirm_reservation");
+						TrackingData trData = new TrackingData(trDataHMap);
+						response.send(new TextMessage(
+								"Please use one of the options below: ",
+								createConfirmationKeyboard(), trData, new Integer(1)));
+						
+					}
 
 				}
 
 				else if (msg.equals("show_reservations")) {
 
-					Map<String, Object> trDataHMap = new HashMap<>();
-					trDataHMap.put("message", "confirm_cancel");
-					trDataHMap.put("res_id", messageText);
-					TrackingData trData = new TrackingData(trDataHMap);
-					response.send(new TextMessage("Are you sure you want to cancel this reservation? ",
-							createCancelReservationKeyboard(), trData, new Integer(1)));
+					if (messageText.split("\\s+")[0].equals("-=#choose-res#=-")) {
+						Map<String, Object> trDataHMap = new HashMap<>();
+						trDataHMap.put("message", "confirm_cancel");
+						resId = Long.parseLong(messageText.split("\\s+")[1]);
+						TrackingData trData = new TrackingData(trDataHMap);
+						response.send(new TextMessage(
+								"Reservation details are listed above. Choose one of the available " + "options:",
+								createCancelReservationKeyboard(), trData, new Integer(1)));
+					}
+
+					else {
+
+						response.send(createShowResMessage(
+								"Please use the slots provided below for choosing reservations. "));
+
+					}
+
 				}
 
 				else if (msg.equals("confirm_cancel")) {
-					System.out.println("Cancel res in");
-					reservationService.delete(Long.parseLong(message.getTrackingData().get("res_id").toString()));
-					System.out.println("Res canceled");
-					Map<String, Object> trDataHMap = new HashMap<>();
-					trDataHMap.put("message", "show_end");
-					TrackingData trData = new TrackingData(trDataHMap);
-					response.send(new TextMessage("You have successfully canceled your reservation. Press Cancel to go to the main menu ",
-							createCancelKeyboard(), trData, new Integer(1)));
-					
+
+					if (messageText.equals("#0A4CancelReservation4A0#")) {
+
+						Map<String, Object> trDataHMap = new HashMap<>();
+						trDataHMap.put("message", "res_cancel");
+						TrackingData trData = new TrackingData(trDataHMap);
+						response.send(new TextMessage(
+								"Press confirm to confirm the cancellation. Press Cancel to go to the main menu.",
+								createConfirmationKeyboard(), trData, new Integer(1)));
+					}
+
+					else {
+						Map<String, Object> trDataHMap = new HashMap<>();
+						trDataHMap.put("message", "confirm_cancel");
+						TrackingData trData = new TrackingData(trDataHMap);
+						response.send(new TextMessage("Please use one of the options available: ",
+								createCancelReservationKeyboard(), trData, new Integer(1)));
+
+					}
+
+				}
+
+				else if (msg.equals("res_cancel")) {
+
+					if (messageText.equals("#A3#Confirm#A3#")) {
+						reservationService.delete(resId);
+						Map<String, Object> trDataHMap = new HashMap<>();
+						trDataHMap.put("message", "show_end");
+						TrackingData trData = new TrackingData(trDataHMap);
+						response.send(new TextMessage(
+								"You have successfully canceled your reservation. Press Home to go to the main menu ",
+								createHomeKeyboard(), trData, new Integer(1)));
+					}
+
+					else {
+
+						Map<String, Object> trDataHMap = new HashMap<>();
+						trDataHMap.put("message", "res_cancel");
+						TrackingData trData = new TrackingData(trDataHMap);
+						response.send(new TextMessage("Please use one of the options available below: ",
+								createConfirmationKeyboard(), trData, new Integer(1)));
+
+					}
+
 				}
 
 			}
@@ -223,9 +283,6 @@ public class ViberBotServiceImpl implements ViberBotService {
 			public void unsubscribe(IncomingUnsubscribeEvent event) {
 
 				String viberId = event.getUserId();
-
-				System.out.println("User ID is : " + viberId);
-
 				userService.unsubscribe(viberId);
 
 			}
@@ -257,7 +314,7 @@ public class ViberBotServiceImpl implements ViberBotService {
 
 		Map<String, Object> cancelButton = new HashMap<>();
 		cancelButton.put("Text", "Cancel");
-		cancelButton.put("BgColor", "#f00b0b");
+		cancelButton.put("BgColor", "#ee6c4d");
 		cancelButton.put("ActionBody", "Cancel");
 		buttons.add(cancelButton);
 
@@ -265,9 +322,9 @@ public class ViberBotServiceImpl implements ViberBotService {
 
 			String roomOnViber = room.getName() + " " + room.getNumber();
 			Map<String, Object> button = new HashMap<>();
-			button.put("BgColor", "#2db9b9");
+			button.put("BgColor", "#afe1f5");
 			button.put("Text", roomOnViber);
-			button.put("ActionBody", roomOnViber);
+			button.put("ActionBody", "choose_room " + roomOnViber);
 			buttons.add(button);
 
 		}
@@ -280,14 +337,25 @@ public class ViberBotServiceImpl implements ViberBotService {
 
 	private MessageKeyboard createCancelKeyboard() {
 
+		return createOneButtonKeyboard("Cancel", "#ee6c4d");
+
+	}
+
+	private MessageKeyboard createHomeKeyboard() {
+
+		return createOneButtonKeyboard("<font color=\"#ffffff\">Home </font>", "#665cac");
+
+	}
+
+	private MessageKeyboard createOneButtonKeyboard(String text, String color) {
 		Map<String, Object> keyboardMap = new HashMap<>();
 		keyboardMap.put("Type", "keyboard");
 
 		List<Map> buttons = new ArrayList<>();
 
 		Map<String, Object> cancelButton = new HashMap<>();
-		cancelButton.put("Text", "Cancel");
-		cancelButton.put("BgColor", "#f00b0b");
+		cancelButton.put("Text", text);
+		cancelButton.put("BgColor", color);
 		cancelButton.put("ActionBody", "Cancel");
 		buttons.add(cancelButton);
 		keyboardMap.put("Buttons", buttons);
@@ -304,7 +372,7 @@ public class ViberBotServiceImpl implements ViberBotService {
 
 		Map<String, Object> cancelButton = new HashMap<>();
 		cancelButton.put("Text", "Cancel");
-		cancelButton.put("BgColor", "#f00b0b");
+		cancelButton.put("BgColor", "#ee6c4d");
 		cancelButton.put("ActionBody", "Cancel");
 		buttons.add(cancelButton);
 
@@ -326,9 +394,9 @@ public class ViberBotServiceImpl implements ViberBotService {
 
 			if (!timeSet.contains(time)) {
 				Map<String, Object> button = new HashMap<>();
-				button.put("BgColor", "#2db9b9");
+				button.put("BgColor", "#afe1f5");
 				button.put("Text", time.toString());
-				button.put("ActionBody", time.toString());
+				button.put("ActionBody", "-=choose_time=- " + time.toString());
 				buttons.add(button);
 			}
 		}
@@ -341,7 +409,7 @@ public class ViberBotServiceImpl implements ViberBotService {
 
 	private TextMessage welcomeMessage(String userName) {
 
-		String JSONString = "{\"Type\": \"keyboard\",\"Buttons\": [{\"Columns\": 3,\"Rows\": 2,\"Text\": \"<font color=\\\"#494E67\\\">Reserve room </font><br><br>\",\"TextSize\": \"medium\",\"TextHAlign\": \"center\",\"TextVAlign\": \"bottom\",\"ActionType\": \"reply\",\"ActionBody\": \"Reserve room\",\"BgColor\": \"#f7bb3f\"}, {\"Columns\": 3,\"Rows\": 2,\"Text\": \"<font color=\\\"#494E67\\\">See previous reservations</font><br><br>\",\"TextSize\": \"medium\",\"TextHAlign\": \"center\",\"TextVAlign\": \"bottom\",\"ActionType\": \"reply\",\"ActionBody\": \"See previous reservations\",\"BgColor\": \"#f6f7f9\"}]}";
+		String JSONString = "{\"Type\": \"keyboard\",\"Buttons\": [{\"Columns\": 3,\"Rows\": 2,\"Text\": \"<font color=\\\"#ffffff\\\">Reserve room </font><br><br>\",\"TextSize\": \"medium\",\"TextHAlign\": \"center\",\"TextVAlign\": \"bottom\",\"ActionType\": \"reply\",\"ActionBody\": \"Reserve room\",\"BgColor\": \"#665cac\"}, {\"Columns\": 3,\"Rows\": 2,\"Text\": \"<font color=\\\"#ffffff\\\">See previous reservations</font><br><br>\",\"TextSize\": \"medium\",\"TextHAlign\": \"center\",\"TextVAlign\": \"bottom\",\"ActionType\": \"reply\",\"ActionBody\": \"See previous reservations\",\"BgColor\": \"#665cac\"}]}";
 		String keyboardMessageStr = JSONString;
 
 		try {
@@ -381,14 +449,15 @@ public class ViberBotServiceImpl implements ViberBotService {
 		List<Map> buttons = new ArrayList<>();
 
 		Map<String, Object> confirmButton = new HashMap<>();
-		confirmButton.put("Text", "Confirm");
-		confirmButton.put("BgColor", "#00ff00");
-		confirmButton.put("ActionBody", "Confirm");
+		confirmButton.put("Text", "<font color=\"#ffffff\">Confirm</font>");
+		confirmButton.put("BgColor", "#665cac");
+
+		confirmButton.put("ActionBody", "#A3#Confirm#A3#");
 		buttons.add(confirmButton);
 
 		Map<String, Object> cancelButton = new HashMap<>();
 		cancelButton.put("Text", "Cancel");
-		cancelButton.put("BgColor", "#f00b0b");
+		cancelButton.put("BgColor", "#ee6c4d");
 		cancelButton.put("ActionBody", "Cancel");
 		buttons.add(cancelButton);
 
@@ -407,7 +476,7 @@ public class ViberBotServiceImpl implements ViberBotService {
 
 		Map<String, Object> cancelButton = new HashMap<>();
 		cancelButton.put("Text", "Cancel");
-		cancelButton.put("BgColor", "#f00b0b");
+		cancelButton.put("BgColor", "#ee6c4d");
 		cancelButton.put("ActionBody", "Cancel");
 		buttons.add(cancelButton);
 
@@ -423,8 +492,8 @@ public class ViberBotServiceImpl implements ViberBotService {
 			resButton.put("Columns", 3);
 			resButton.put("Rows", 2);
 			resButton.put("Text", resText);
-			resButton.put("BgColor", "#add8e6");
-			resButton.put("ActionBody", res.getId());
+			resButton.put("BgColor", "#afe1f5");
+			resButton.put("ActionBody", "-=#choose-res#=- " + res.getId());
 			resButton.put("TextSize", "small");
 			buttons.add(resButton);
 
@@ -444,20 +513,49 @@ public class ViberBotServiceImpl implements ViberBotService {
 		List<Map> buttons = new ArrayList<>();
 
 		Map<String, Object> cancelButton = new HashMap<>();
-		cancelButton.put("Text", "Cancel");
-		cancelButton.put("BgColor", "#f00b0b");
+		cancelButton.put("Text", "<font color=\"#ffffff\">Home </font>");
+		cancelButton.put("BgColor", "#665cac");
 		cancelButton.put("ActionBody", "Cancel");
 		buttons.add(cancelButton);
 
 		Map<String, Object> cancelResButton = new HashMap<>();
 		cancelResButton.put("Text", "Cancel Reservation");
-		cancelResButton.put("BgColor", "#f00b0b");
-		cancelResButton.put("ActionBody", "CancelReservation");
+		cancelResButton.put("BgColor", "#ee6c4d");
+		cancelResButton.put("ActionBody", "#0A4CancelReservation4A0#");
 		buttons.add(cancelResButton);
 		keyboardMap.put("Buttons", buttons);
 
 		return new MessageKeyboard(keyboardMap);
 
+	}
+
+	private TextMessage createRoomTextMessage(String addText) {
+
+		MessageKeyboard roomKeyboard = createRoomKeyboard();
+		Map<String, Object> trDataHMap = new HashMap<>();
+		trDataHMap.put("message", "get_rooms");
+		TrackingData trData = new TrackingData(trDataHMap);
+
+		return new TextMessage(addText + "Please select one of the available rooms.", roomKeyboard, trData,
+				new Integer(1));
+	}
+
+	private TextMessage createTimeTextMessage(String addText) {
+		Map<String, Object> trDataHMap = new HashMap<>();
+		trDataHMap.put("message", "choose_time");
+		TrackingData trData = new TrackingData(trDataHMap);
+
+		return new TextMessage(addText + "Pick desired time of reservation: ", createTimeKeyboard(), trData,
+				new Integer(1));
+	}
+
+	private TextMessage createShowResMessage(String string) {
+
+		Map<String, Object> trDataHMap = new HashMap<>();
+		trDataHMap.put("message", "show_reservations");
+		TrackingData trData = new TrackingData(trDataHMap);
+		return new TextMessage(string + "Your previous reservations are shown on the keyboard:",
+				createReservationsKeyboard(), trData, new Integer(1));
 	}
 
 }
