@@ -8,7 +8,7 @@
       <div class="container">
       <h2>Users</h2>
          <div th:if="${not #lists.isEmpty(users)}">
-            <table class="table table-striped">
+            <table class="table table-hover">
                <tr>
                   <th>ViberId</th>
                   <th>Name</th>
@@ -26,7 +26,5 @@
             <div>List is empty</div>
          </div>
       </div>
-      <!-- /.container -->
-      <div th:replace="fragments/footer :: footer"/>
    </body>
 </html>

@@ -1,31 +1,29 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head lang="en" th:fragment="head">
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <link href="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.4/css/bootstrap.min.css"
-          th:href="@{/webjars/bootstrap/3.3.4/css/bootstrap.min.css}"
-          rel="stylesheet" media="screen" />
-
-    <script src="http://cdn.jsdelivr.net/webjars/jquery/2.1.4/jquery.min.js"
-            th:src="@{/webjars/jquery/2.1.4/jquery.min.js}"></script>
-
-   
-</head>
-<body>
-<div th:fragment="header">
-    <!-- this is header -->
-    <nav class="navbar navbar-inverse">
-        <div class="container">
-            <div class="navbar-header">
-            <ul class="nav nav-tabs" role="tablist">
-                <li><a class="navbar-brand" th:href="@{/}">Viber Bot</a></li>
-                <li><a class="navbar-brand" th:href="@{/roomshow}">Rooms</a></li>
-                <li><a class="navbar-brand" th:href="@{/usershow}">Users</a></li>
-                <li><a class="navbar-brand" th:href="@{/reservationshow}">Reservations</a></li>
-                </ul>
+   <head lang="en" th:fragment="head">
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+      <link href="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.4/css/bootstrap.min.css"
+         th:href="@{/webjars/bootstrap/3.3.4/css/bootstrap.min.css}"
+         rel="stylesheet" media="screen" />
+      <script src="http://cdn.jsdelivr.net/webjars/jquery/2.1.4/jquery.min.js"
+         th:src="@{/webjars/jquery/2.1.4/jquery.min.js}"></script>
+   </head>
+   <body>
+      <div th:fragment="header">
+         <nav class="navbar navbar-inverse">
+            <div class="container-fluid">
+               <!--             <div class="navbar-header"></div> -->
+               <ul class="nav navbar-nav">
+                  <li><a class="navbar-brand" th:href="@{/admin}">Viber Bot</a></li>
+                  <li><a class="navbar-brand" th:href="@{/roomshow}">Rooms</a></li>
+                  <li><a class="navbar-brand" th:href="@{/usershow}">Users</a></li>
+                  <li><a class="navbar-brand" th:href="@{/reservationshow}">Reservations</a></li>
+               </ul>
+               <ul class="nav navbar-nav navbar-right">
+                  <li><a th:href="@{/logout}"><span class="glyphicon glyphicon-user"></span>Sign Out</a></li>
+               </ul>
             </div>
-        </div>
-    </nav>
-</div>
-</body>
+         </nav>
+      </div>
+   </body>
 </html>
