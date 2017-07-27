@@ -9,5 +9,5 @@ import org.springframework.stereotype.Repository;
 public interface RoomRepository extends CrudRepository<Room, Long>{
 
 	public List<Room> findByName(String name);
-
+	public Room findByNumber(String number);
 }

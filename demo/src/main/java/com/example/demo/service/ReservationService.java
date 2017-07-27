@@ -14,5 +14,6 @@ public interface ReservationService {
 	void edit(Reservation reservation);
 	void delete(Long id);
 	Iterable<LocalTime> getFreeRoomCapacitiesOnDate(String roomId, LocalDate date);
-	Reservation getByUser(String viberId);
+	Iterable<Reservation> getByUser(String viberId);
+	Reservation getOne(Long id);
 }

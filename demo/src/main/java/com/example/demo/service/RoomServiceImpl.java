@@ -5,9 +5,11 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.demo.database.Room;
 import com.example.demo.database.RoomRepository;
+import com.example.demo.database.User;
 
 @Service
 public class RoomServiceImpl implements RoomService {
@@ -45,7 +47,10 @@ public class RoomServiceImpl implements RoomService {
 		return repository.findOne(id);
 	}
 	 
-	
+	@Override
+	public Room getByNumber(@RequestParam("number") String number) {
+		return repository.findByNumber(number);
+	}
 	
 	
 	

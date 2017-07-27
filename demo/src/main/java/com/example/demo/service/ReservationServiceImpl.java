@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.demo.database.Reservation;
 import com.example.demo.database.ReservationRepository;
+import com.example.demo.database.Room;
 import com.example.demo.database.User;
 import com.example.demo.database.UserRepository;
 
@@ -51,8 +52,13 @@ public class ReservationServiceImpl implements ReservationService{
 	}
 
 	@Override
-	public Reservation getByUser(String viberId) {
+	public Iterable<Reservation> getByUser(String viberId) {
 		return repository.getByUser(viberId);
+	}
+	
+	@Override
+	public Reservation getOne(Long id) {
+		return repository.findOne(id);
 	}
 	
 

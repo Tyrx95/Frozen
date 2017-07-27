@@ -29,11 +29,11 @@ public class Reservation implements Serializable{
 	private Long id;
 	
 	@JoinColumn(name = "userId")
-	@ManyToOne(cascade = CascadeType.REMOVE)
+	@ManyToOne()
 	private User userId;
 	
 	@JoinColumn(name = "roomId")
-	@ManyToOne(cascade = CascadeType.REMOVE)
+	@ManyToOne()
 	private Room roomId;
 	
 	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
