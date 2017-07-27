@@ -3,11 +3,20 @@
    <head>
       <div th:replace="fragments/header :: header-css"/>
    </head>
+   <style>
+   
+   .container{
+    padding-bottom: 20px;
+   }
+   
+   </style>
    <body>
       <div th:replace="fragments/headerinc :: header"/>
       <div class="container">
          <h2>Rooms</h2>
-         <a th:href="@{'/room/new/'}" class="btn btn-primary" role="button">Add new room</a>  
+         <a th:href="@{'/room/new/'}" class="btn btn-primary btn pull-right " role="button">Add new room</a>  
+         </div>
+         <div class="container">
          <div th:if="${not #lists.isEmpty(rooms)}">
             <table class="table table-hover">
                <tr>
@@ -15,8 +24,8 @@
                   <th>Name</th>
                   <th>Start work time</th>
                   <th>End work time</th>
-                  <th>Edit</th>
-                  <th>Delete</th>
+                  <th></th>
+                  <th></th>
                </tr>
                <tr th:each="room : ${rooms}">
                   <td th:text="${room.number}"></td>
@@ -24,15 +33,21 @@
                   <td th:text="${room.startWorkTime}"></td>
                   <td th:text="${room.endWorkTime}"></td>
                   <td>
-                     <a th:href="${'/room/edit/' + room.id}" class="btn btn-success" role="button">
-                     Edit
-                     </a>  
-                  </td>
-                  <td>
-                     <a th:href="${'/room/delete/' + room.id}" class="btn btn-danger" role="button">
-                     Delete
+                     <a th:href="${'/room/edit/' + room.id}" class="btn btn-success btn-xs btn pull-right"  role="button"><span class="glyphicon glyphicon-pencil"></span>
+                     </a> 
+                     <td> 
+                     <a th:href="${'/room/delete/' + room.id}" class="btn btn-danger btn-xs btn pull-right" role="button"><span class="glyphicon glyphicon-trash"></span>
                      </a>
+                     </td>
                   </td>
+               </tr>
+               <tr>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
                </tr>
             </table>
          </div>
